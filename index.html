@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html>
-
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -9,6 +6,9 @@
     <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
     <script src='converter.js'></script>
 </head>
+
+<!DOCTYPE html>
+<html>
 
 <body>
     <div class="header-container">
@@ -21,9 +21,9 @@
 
     <div class="checkbox-container">
         <input type="checkbox" id="checkbox-link">
-        <label for="checkbox-link">Preserve link</label>
+        <label for="checkbox-link">Convert link</label>
         <input type="checkbox" id="checkbox-code">
-        <label for="checkbox-code">Preserve inline code</label>
+        <label for="checkbox-code">Convert inline code</label>
         <input type="checkbox" id="checkbox-escape-pipe">
         <label for="checkbox-escape-pipe">Escape pipe characters</label>
         <input type="checkbox" id="checkbox-bold-row">
@@ -34,10 +34,10 @@
         <label for="checkbox-code-column">Inline code first column</label>
     </div>
 
-    
+
     <div class="input-container">
-        <input id="html-input">
-        <input id="markdown-output">
+        <textarea id="html-input" type="text"></textarea>
+        <textarea id="markdown-output" type="text"></textarea>
     </div>
 </body>
 

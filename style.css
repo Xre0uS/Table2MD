@@ -38,8 +38,13 @@ button {
     min-height: 100vh;
 }
 
-input {
+textarea {
     flex: 1;
     margin: 10px;
-    background-color: transparent;
+    background-color: #1d1d1d;
+    color: #FFFFFF;
+    text-align: start;
+    overflow-x: scroll;
+    text-align: left;
+    font-size: 12pt;
   }

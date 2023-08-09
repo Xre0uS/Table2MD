@@ -1,44 +1,51 @@
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>HTML Table to Markdown</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src='converter.js'></script>
-</head>
-
 <!DOCTYPE html>
 <html>
 
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>HTML Table to Markdown+</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+</head>
+
 <body>
     <div class="header-container">
-        <h2>HTML Table to Markdown</h2>
+        <h2>HTML Table to Markdown+</h2>
+        <div class="message-box" id="message-box"></div>
         <div class="button-container">
-            <button id="copy-btn" disabled>Copy</button>
-            <button id="convert-btn">Convert</button>
+            <button id="btn-copy">Copy</button>
+            <button id="btn-convert">Convert</button>
         </div>
     </div>
-
     <div class="checkbox-container">
-        <input type="checkbox" id="checkbox-link">
+        <input type="checkbox" id="checkbox-link" value="convLink">
         <label for="checkbox-link">Convert link</label>
-        <input type="checkbox" id="checkbox-code">
+        <input type="checkbox" id="checkbox-code" value="convCode">
         <label for="checkbox-code">Convert inline code</label>
-        <input type="checkbox" id="checkbox-escape-pipe">
+        <input type="checkbox" id="checkbox-escape-pipe" value="escPipe" checked>
         <label for="checkbox-escape-pipe">Escape pipe characters</label>
-        <input type="checkbox" id="checkbox-bold-row">
+        <input type="checkbox" id="checkbox-bold-row" value="boldRow">
         <label for="checkbox-bold-row">Bold first row</label>
-        <input type="checkbox" id="checkbox-bold-column" onclick="document.getElementById('checkbox-code-column').checked = false;">
+        <input type="checkbox" id="checkbox-bold-column" value="boldCol"
+            onclick="document.getElementById('checkbox-code-column').checked = false;">
         <label for="checkbox-bold-column">Bold first column</label>
-        <input type="checkbox" id="checkbox-code-column" onclick="document.getElementById('checkbox-bold-column').checked = false;">
+        <input type="checkbox" id="checkbox-code-column" value="codeCol"
+            onclick="document.getElementById('checkbox-bold-column').checked = false;">
         <label for="checkbox-code-column">Inline code first column</label>
     </div>
-
-
     <div class="input-container">
-        <textarea id="html-input" type="text"></textarea>
-        <textarea id="markdown-output" type="text"></textarea>
+        <div class="textarea-container">
+            <div class="textarea-header">HTML</div>
+            <textarea id="html-input" type="text"></textarea>
+        </div>
+        <div class="textarea-container">
+            <div class="textarea-header">Markdown</div>
+            <textarea id="markdown-output" type="text" disabled></textarea>
+        </div>
     </div>
+    <div id="processor" style="display:none"></div>
+    <script type="text/javascript" src="converter.js"></script>
 </body>
 
 </html>

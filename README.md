@@ -65,7 +65,7 @@ HTML table:
 </table>
 ```
 
-Converts to:
+Converts to with default options:
 
 | Fruit | Color | Taste |
 | --- | --- | --- |

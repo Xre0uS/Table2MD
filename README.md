@@ -66,17 +66,18 @@ HTML table:
 ```
 
 Converts to:
+
 | Fruit | Color | Taste |
 | --- | --- | --- |
-| Apple[ apple.com](https://apple.coom) | Red, Green, Yellow | Sweet |
-| Banana | Yellow`#FFE135` | Sweet |
+| Apple[ apple.com](https://apple.com) | Red, Green, Yellow | Sweet |
+| Banana | Yellow``#FFE135`` | Sweet |
 | Orange | Orange | Citrusy \| sour |
 
 ```
 | Fruit | Color | Taste |
 | --- | --- | --- |
-| Apple[ apple.com](https://apple.coom) | Red, Green, Yellow | Sweet |
-| Banana | Yellow`#FFE135` | Sweet |
+| Apple[ apple.com](https://apple.com) | Red, Green, Yellow | Sweet |
+| Banana | Yellow``#FFE135`` | Sweet |
 | Orange | Orange | Citrusy \| sour |
 ```
 

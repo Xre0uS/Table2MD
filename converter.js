@@ -41,6 +41,8 @@ function convertTables() {
         }
     }
     else {
+        copyBtn.disabled = true;
+        outputBox.value = "";
         displayMessage("No tables found")
     }
 }

@@ -19,14 +19,16 @@
         </div>
     </div>
     <div class="checkbox-container">
-        <input type="checkbox" id="checkbox-link" value="convLink">
-        <label for="checkbox-link">Convert link</label>
-        <input type="checkbox" id="checkbox-code" value="convCode">
-        <label for="checkbox-code">Convert inline code</label>
+        <input type="checkbox" id="header-first-row" value="headerFirstRow" checked>
+        <label for="header-first-row">First row as header</label>
+        <input type="checkbox" id="checkbox-link" value="convertLink" checked>
+        <label for="checkbox-link">Convert links</label>
+        <input type="checkbox" id="checkbox-code" value="convertCode" checked>
+        <label for="checkbox-code">Convert code tags</label>
         <input type="checkbox" id="checkbox-escape-pipe" value="escPipe" checked>
         <label for="checkbox-escape-pipe">Escape pipe characters</label>
-        <input type="checkbox" id="checkbox-bold-row" value="boldRow">
-        <label for="checkbox-bold-row">Bold first row</label>
+        <input type="checkbox" id="checkbox-bold-header" value="boldHeader">
+        <label for="checkbox-bold-header">Bold headers</label>
         <input type="checkbox" id="checkbox-bold-column" value="boldCol"
             onclick="document.getElementById('checkbox-code-column').checked = false;">
         <label for="checkbox-bold-column">Bold first column</label>
@@ -44,7 +46,7 @@
             <textarea id="markdown-output" type="text" disabled></textarea>
         </div>
     </div>
-    <div id="processor" style="display:none"></div>
+    <div id="buffer" style="display:none"></div>
     <script type="text/javascript" src="converter.js"></script>
 </body>
 

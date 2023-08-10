@@ -56,7 +56,7 @@ HTML table:
         <td>Sweet</td>
     </tr>
     <tr>
-        <td>Orange<code>#FFA500</code></td>
+        <td>Orange</td>
         <td>Orange</td>
         <td>Citrusy | sour</td>
     </tr>

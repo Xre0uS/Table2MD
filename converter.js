@@ -81,7 +81,7 @@ function convertRowElements(rowNumber, rowContent) {
 
     if (rowNumber == 0) {
         tableColumnCount = rowElements.length;
-        var [headerRow, dividerRow ] = createDividerRow(rowElements.length);
+        var [headerRow, dividerRow] = createDividerRow(rowElements.length);
         if (document.getElementById("header-first-row").checked) {
             return convertedRow.join(markdownCellSeparator).trim() + newLine + dividerRow;
         }
@@ -113,7 +113,7 @@ var optionsFunctions = {
         return elementData;
     },
     convertCode: (elementData) => {
-        elementData.innerHTML = elementData.innerHTML.replace(/<code>(.*?)<\/code>/g, '`$1`')
+        elementData.innerHTML = elementData.innerHTML.replace(/<code>(.*?)<\/code>/g, '``$1``')
         return elementData;
     },
     escPipe: (elementData) => {
@@ -133,8 +133,14 @@ var optionsFunctions = {
     },
     codeCol: (elementData, rowNumber, columnIndex) => {
         if (rowNumber > 0 && columnIndex == 0) {
-            elementData.innerHTML = elementData.innerHTML.replace(/`/g, '');
-            elementData.innerHTML = "`" + elementData.innerHTML + "`";
+            elementData.innerHTML = elementData.innerHTML.replace(/`+/g, '`');
+            if (elementData.textContent.startsWith("`")) {
+                elementData.textContent = " " + elementData.textContent
+            }
+            if (elementData.textContent.endsWith("`")) {
+                elementData.textContent = elementData.textContent + " "
+            }
+            elementData.innerHTML = "``" + elementData.innerHTML + "``";
             return elementData;
         }
         return elementData;

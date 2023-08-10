@@ -10,6 +10,8 @@ Functions:
 - Bold first column
 - First column as code
 
+## Use it here: https://xre0us.github.io/html-table-to-markdown-plus/
+
 ## Example
 
 HTML table:

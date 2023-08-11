@@ -60,11 +60,6 @@ function convertTables() {
     }
 }
 
-function getChecked(valueName) {
-    const option = optionsArray.find(option => option.value == valueName);
-    return option.checked;
-}
-
 function convertTableElements(tableNumber, table) {
     var convertedRows = [];
     var rows = table.getElementsByTagName("tr");
@@ -181,13 +176,11 @@ function displayOutput(tableCount, outputData) {
     }
     else {
         var message = "";
-
         errorArray.forEach(obj => {
             Object.entries(obj).forEach(([key, value]) => {
                 message += " " + key + " " + value
             });
         });
-
         displayMessage(tableCount - errorArray.length + " table(s) converted, error(s) in" + message)
     }
 

@@ -13,6 +13,19 @@ function setup() {
     copyBtn.disabled = true;
     outputBox.value = "";
 
+    const checkBoxEscPipe = document.getElementById("checkbox-escape-pipe");
+    const checkBoxEscPipeObs = document.getElementById("checkbox-escape-pipe-obs");
+    checkBoxEscPipe.addEventListener("change", function() {
+        if (!checkBoxEscPipe.checked) {
+            checkBoxEscPipeObs.checked = false;
+        }
+    });
+    checkBoxEscPipeObs.addEventListener("change", function() {
+        if (checkBoxEscPipeObs.checked) {
+            checkBoxEscPipe.checked = true;
+        }
+    });
+
     convertBtn.addEventListener("click", function () {
         getCheckboxValues();
         convertTables();

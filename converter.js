@@ -103,7 +103,6 @@ function processOptions(elementData, rowNumber, columnIndex) {
             elementData = optionsFunctions[option.value](elementData, rowNumber, columnIndex);
         }
     });
-
     return elementData.textContent;
 }
 
@@ -143,6 +142,10 @@ var optionsFunctions = {
             elementData.innerHTML = "``" + elementData.innerHTML + "``";
             return elementData;
         }
+        return elementData;
+    },
+    escPipeObs: (elementData) => {
+        elementData.innerHTML = elementData.innerHTML.replace(/(?<=`[^`]*)\\\|(?=[^`]*`)/g, '``&amp;#124``');
         return elementData;
     }
 }

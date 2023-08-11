@@ -80,5 +80,16 @@ Converts to:
 | Banana | Yellow``#FFE135`` | Sweet |
 | Orange | Orange | Citrusy \| sour |
 ```
+## Escape pipe characters for obsidian.md
 
+[obsidian](https://obsidian.md/) (yes I know it displays HTML) has a long standing [problem](https://forum.obsidian.md/t/pipe-problems-in-tables-math-latex-inline-code-and-separator/3692/2) of escape pipe characters being shown in inline code in tables.
+
+E.g. the cell
+<table>
+<td><code>this\|that</code></td>
+</table>
+
+will be shown as-is in obsidian. Changing `|` to `&#124` fixes it.
+
+##
 I'm surprised to find no table converters around that converts links or code tags, in fact, the only instances that I could find that do it properly is [this Debian package](https://manpages.debian.org/testing/python3-html2text/html2markdown.py3.1.en.html) and [turndown](https://github.com/mixmark-io/turndown) with [turndown-plugin-gfm](https://github.com/mixmark-io/turndown-plugin-gfm). But what if I just want to quickly copy/paste a table? Here is my take on it.

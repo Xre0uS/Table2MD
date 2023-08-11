@@ -198,15 +198,6 @@ function displayOutput(tableCount, outputData) {
     }
 }
 
-function displayCheckboxValues() {
-    let message = "";
-    optionsArray.forEach(function (option) {
-        message += option.value + ": " + option.checked + ", ";
-    });
-    message = message.slice(0, -2);
-    displayMessage(message);
-}
-
 async function writeToClipboard(data) {
     try {
         await navigator.clipboard.writeText(data);

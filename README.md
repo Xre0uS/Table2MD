@@ -1,6 +1,6 @@
 # HTML Table to Markdown+
 
-Functions:
+Toggleable functions:
 - Extracts and converts multiple tables (even whole page source)
 - Converts links in table
 - Converts code tags in table

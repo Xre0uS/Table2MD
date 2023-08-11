@@ -7,8 +7,8 @@ Functions:
 - Escape pipe characters
 - Use first row as header or insert an empty first row
 - Bold headers
-- Bold first column
-- First column as code
+- Bold first column (ignores header row)
+- First column as code (ignores header row)
 
 ## Use it here: https://xre0us.github.io/html-table-to-markdown-plus/
 
@@ -65,7 +65,7 @@ HTML table:
 </table>
 ```
 
-Converts to:
+Converts to with default options:
 
 | Fruit | Color | Taste |
 | --- | --- | --- |

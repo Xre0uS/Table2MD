@@ -123,6 +123,10 @@ var optionsFunctions = {
         elementData.innerHTML = elementData.innerHTML.replace(/<code>(.*?)<\/code>/g, '``$1``')
         return elementData;
     },
+    convertLnBrk: (elementData) => {
+        elementData.innerHTML = elementData.innerHTML.replace(/<br>/g, "&lt;br&gt;");
+        return elementData;
+    },
     escPipe: (elementData) => {
         elementData.innerHTML = elementData.innerHTML.replace(/\|/g, '\\|')
         return elementData;

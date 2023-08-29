@@ -4,6 +4,7 @@ Toggleable functions:
 - Extracts and converts multiple tables (even whole page source)
 - Converts links in table
 - Converts code tags in table
+- Converts line breaks (keep it as `<br>` if the table has multiple lines within a cell)
 - Escape pipe characters
 - Use first row as header or insert an empty first row
 - Bold headers

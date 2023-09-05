@@ -6,48 +6,88 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>HTML Table to Markdown+</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
 </head>
 
 <body>
     <div class="header-container">
         <h2>HTML Table to Markdown+</h2>
-        <div class="message-box" id="message-box"></div>
         <div class="button-container">
-            <button id="btn-copy">Copy</button>
-            <button id="btn-convert">Convert</button>
+            <div class="message-box" id="message-box"></div>
+            <button id="btn-convert" title="Convert again to get different possible results">Convert</button>
+            <button id="btn-copy">Copy</button>  
         </div>
     </div>
-    <div class="checkbox-container">
+    <div class="options-container">
         <input type="checkbox" id="header-first-row" value="headerFirstRow" checked>
         <label for="header-first-row">First row as header</label>
-        <input type="checkbox" id="checkbox-link" value="convertLink" checked>
-        <label for="checkbox-link">Convert links</label>
-        <input type="checkbox" id="checkbox-code" value="convertCode" checked>
-        <label for="checkbox-code">Convert code tags</label>
-        <input type="checkbox" id="checkbox-br" value="convertLnBrk">
-        <label for="checkbox-br">Convert line breaks</label>
-        <input type="checkbox" id="checkbox-escape-pipe" value="escPipe" checked>
-        <label for="checkbox-escape-pipe">Escape pipe characters</label>
-        <input type="checkbox" id="checkbox-bold-header" value="boldHeader">
-        <label for="checkbox-bold-header">Bold headers</label>
-        <input type="checkbox" id="checkbox-bold-column" value="boldCol"
-            onclick="document.getElementById('checkbox-code-column').checked = false;">
-        <label for="checkbox-bold-column">Bold first column</label>
-        <input type="checkbox" id="checkbox-code-column" value="codeCol"
-            onclick="document.getElementById('checkbox-bold-column').checked = false;">
-        <label for="checkbox-code-column">Inline code first column</label>
-        <input type="checkbox" id="checkbox-escape-pipe-obs" value="escPipeObs">
-        <label for="checkbox-escape-pipe-obs">Escape pipe characters(obsidian)</label>
+        <div id="html-options" style="display: inline-block;">
+            <input type="checkbox" id="checkbox-link" value="convertLink" checked>
+            <label for="checkbox-link">Convert links</label>
+            <input type="checkbox" id="checkbox-code" value="convertCode" checked>
+            <label for="checkbox-code">Convert code tags</label>
+            <input type="checkbox" id="checkbox-br" value="convertLnBrk">
+            <label for="checkbox-br">Convert line breaks</label>
+        </div>
+        <div id="other-options" style="display: inline-block;">
+            <input type="checkbox" id="checkbox-trim-ws" value="trimWhiteSpace" checked>
+            <label for="checkbox-trim-ws">Trim whitespace</label>
+        </div>
+        <input type="checkbox" id="checkbox-trim-bl" value="trimBlankLines" checked>
+        <label for="checkbox-trim-bl">Trim blank lines</label>
+        <br>
+        <label for="pipe-options">Pipe characters:</label>
+        <Select name="pipe-options" id="pipe-options">
+            <option value=standard>Escape</option>
+            <option value=obsidian title="For obsidian.md">Escape (Obsidian)</option>
+        </Select>
+        <label for="header-options">Header style:</label>
+        <Select name="header-options" id="header-options">
+            <option value="">None</option>
+            <option value="**">Bold</option>
+            <option value="*">Italic</option>
+            <option value="`">Code</option>
+        </Select>
+        <label for="column-options">First column style:</label>
+        <Select name="column-options" id="column-options">
+            <option value="">None</option>
+            <option value="**">Bold</option>
+            <option value="*">Italic</option>
+            <option value="`">Code</option>
+        </Select>
+        <label for="width-options">Table width:</label>
+        <Select name="width-options" id="width-options">
+            <option value="header" selected>Same as header</option>
+            <option value="fill">Fill</option>
+            <option value="trim">Trim</option>
+            <option value="custom">Custom</option>
+        </Select>
+        <input type="text" id="width-input-box" width="10px" style="width: 35px; display: none;" placeholder="Width" title="Enter table width">
     </div>
     <div class="input-container">
         <div class="textarea-container">
-            <div class="textarea-header">HTML</div>
-            <textarea id="html-input" type="text"></textarea>
+            <div class="textarea-header">
+                <select name="converter-mode-options" id="converter-mode-options">
+                    <option value="html" data-delimiter="html">HTML</option>
+                    <option value="space" data-delimiter=" {2,}">Spaces</option>
+                    <option value="spaceSmart" data-delimiter="spaceSmart">Space (Smart selection)</option>
+                    <option value="xls" data-delimiter=\t>Excel (Tab)</option>
+                    <option value="csv" data-delimiter=",">CSV (Comma)</option>
+                    <option value="dash" data-delimiter="-">Dash</option>
+                    <option value="advanced" data-delimiter="advanced">Advanced smart selection</option>
+                </select>
+                <div id="advanced-options" style="display: inline-block;">
+                    <input type="text" id="delimiter-input" style="width: 60px;" placeholder="Delimiter" title="Enter your own delimiter, leave blank for smart selection of space. Supports regex">
+                    <input type="text" id="cell-character-input" style="width: 40px;" placeholder="Cell char" title="By default, only alphanumeric characters are chosen as the start and end of a cell, add additional characters here">
+                    <input type="range" min="1" max="100" value="75" class="slider" style="width: 200px;" id="threshold-slider" title="Set a threshold percentage">
+                    <div id="slider-percentage" style="display: inline-block;"></div>
+                </div>
+            </div>
+            <textarea id="text-input" type="text"></textarea>
         </div>
         <div class="textarea-container">
             <div class="textarea-header">Markdown</div>
-            <textarea id="markdown-output" type="text" disabled></textarea>
+            <textarea id="markdown-output" type="text" readonly></textarea>
         </div>
     </div>
     <div id="buffer" style="display:none"></div>

@@ -6,7 +6,7 @@
 - Use first row as header or insert an empty first row
 - First header/column style
 - Adjust table width to be the same as the header, fill to match max width or trim to min width
-- Smart selector which tries dynamically find cells even if the table is badly formatted (see demo), with regex support
+- Smart selector which tries dynamically find cells even if the table is badly formatted (see example), with regex support
 - Supported formats: HTML, spaces(2 or more), Excel, CSV, dash, and smart selection mode
 
 ## Use it here: https://xre0us.github.io/Table2MD/

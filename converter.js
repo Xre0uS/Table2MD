@@ -1,6 +1,6 @@
 const newLine = "\n";
 const markdownCellSeparator = " | ";
-var inputText, outputBox, copyBtn, convertBtn, messageBox, checkBoxes, converterMode, converterModeDropdown, escPipeObs, buffer, optionsArray, tableWidthOption, widthOptionsDropdown, widthInput, tableDelimiter, thresholdSlider, thresholdValue, isTrimBlChecked, customWidth;
+var inputText, outputBox, copyBtn, convertBtn, messageBox, checkBoxes, converterMode, converterModeDropdown, escPipeObs, buffer, optionsArray, tableWidthOption, widthOptionsDropdown, widthInputBox, widthInputDiv, tableDelimiter, thresholdSlider, thresholdValue, isTrimBlChecked, customWidth, smartWidth;
 
 function setup() {
     converterModeDropdown = document.getElementById("converter-mode-options");
@@ -11,7 +11,8 @@ function setup() {
     buffer = document.getElementById("buffer");
     checkBoxes = document.querySelectorAll('input[type="checkbox"]');
     widthOptionsDropdown = document.getElementById("width-options");
-    widthInput = document.getElementById("width-input-box");
+    widthInputBox = document.getElementById("width-input-box");
+    widthInputDiv = document.getElementById("width-input-div");
     thresholdSlider = document.getElementById("threshold-slider");
     clearOutput();
 
@@ -31,8 +32,8 @@ function addEventListenersFunc() {
             document.getElementById("advanced-options").style.display = ("none");
             widthOptionsDropdown.value = "custom";
             widthOptionsDropdown.disabled = true;
-            widthInput.style.display = "inline-block";
-            widthInput.focus();
+            widthInputDiv.style.display = "inline-block";
+            widthInputBox.focus();
             document.getElementById("html-options").style.display = "none";
             document.getElementById("other-options").style.display = "inline-block";
             if (converterMode == "advanced") {
@@ -60,38 +61,40 @@ function addEventListenersFunc() {
         tableWidthOption = widthOptionsDropdown.value;
 
         if (tableWidthOption == "custom") {
-            widthInput.style.display = "inline-block";
-            widthInput.focus();
+            widthInputDiv.style.display = "inline-block";
+            widthInputBox.focus();
         }
         else {
-            widthInput.style.display = "none";
+            widthInputDiv.style.display = "none";
         }
     });
 
     thresholdSlider.addEventListener('input', function () {
+        clearOutput();
         getOptionsValues();
         document.getElementById("slider-percentage").innerHTML = thresholdValue;
 
         if (/^\s*$/.test(inputText)) {
-            clearOutput();
             displayMessage(1, "Enter something to start converting")
         }
         else {
-            clearOutput();
             convertTables();
         }
     });
 
     convertBtn.addEventListener("click", function () {
+        clearOutput();
         getOptionsValues();
         if (/^\s*$/.test(inputText) && converterMode != "advanced") {
-            clearOutput();
             displayMessage(1, "Enter something to start converting")
         }
         else {
-            clearOutput();
             convertTables();
         }
+    });
+
+    document.getElementById("width-help").addEventListener("click", function () {
+        alert("For standard mode, enter something like: 2 or 3,6 or 1-4\nFor smart mode, enter the table width, then the columns to be shown separated by a comma(skip to show all rows).\nE.g. Table has 5 columns, but show columns 2-5, enter: 5,2-5")
     });
 }
 
@@ -100,9 +103,11 @@ function getOptionsValues() {
     converterMode = converterModeDropdown.value;
     tableWidthOption = widthOptionsDropdown.value;
     thresholdValue = thresholdSlider.value;
-    customWidth = widthInput.value;
     escPipeObs = document.getElementById("pipe-options").value;
     isTrimBlChecked = document.getElementById("checkbox-trim-bl").checked;
+    if (widthOptionsDropdown.value == "custom") {
+        customWidth = parseWidthInput(widthInputBox.value);
+    }
     optionsArray = [];
     checkBoxes.forEach(function (checkbox) {
         optionsArray.push({
@@ -118,14 +123,68 @@ function getOptionsValues() {
     );
 }
 
-function convertTables() {
-    if (widthOptionsDropdown.value == "custom" && (isNaN(customWidth) || customWidth < 1)) {
-        displayMessage(1, "Enter a number > 0 for table width")
-        widthInput.focus();
+function parseWidthInput(input) {
+    var parts;
+    const MAX_LIMIT = 999;
+    if (!input || /[^0-9,-]|,-|--/.test(input) || input < 1) {
+        displayMessage(1, "Invalid width format");
+        widthInputBox.focus();
+        return;
     }
-    else if (widthOptionsDropdown.value == "custom" && customWidth > 999) {
-        displayMessage(1, "ಠ_ಠ");
-        widthInput.focus();
+
+    let result = [];
+
+    if (tableWidthOption === "custom") {
+        const firstNum = parseInt(input.split(',')[0]);
+        if (firstNum < MAX_LIMIT) {
+            smartWidth = Array.from({ length: firstNum }, (_, i) => i + 1);
+            parts = input.split(',').slice(1).filter(Boolean);
+        } else {
+            displayMessage(1, "ಠ_ಠ");
+            widthInputBox.focus();
+            return;
+        }
+    }
+    else {
+        parts = input.split(',').filter(Boolean);
+    }
+
+    for (let part of parts) {
+        if (part.includes('-')) {
+            const [start, end] = part.split('-').map(Number);
+            if (end - start > MAX_LIMIT) {
+                displayMessage(1, "ಠ_ಠ");
+                widthInputBox.focus();
+                return;
+            }
+            result = result.concat(Array.from({ length: end - start + 1 }, (_, i) => i + start));
+        } else {
+            const num = Number(part);
+            if (num > MAX_LIMIT) {
+                displayMessage(1, "ಠ_ಠ");
+                widthInputBox.focus();
+                return;
+            }
+            if (parts.length === 1) {
+                result = Array.from({ length: num }, (_, i) => i + 1);
+            } else {
+                result.push(num);
+            }
+        }
+    }
+    result = [...new Set(result)].sort((a, b) => a - b);
+    
+    if (smartWidth) {
+        displayMessage(1, `Converting columns: ${smartWidth}\n`);
+    }
+    else {
+        displayMessage(1, `Converting columns: ${result}\n`);
+    }
+    return result;
+}
+
+function convertTables() {
+    if (widthOptionsDropdown.value == "custom" && !customWidth) {
     }
     else {
         if (converterMode == "html") {
@@ -139,7 +198,6 @@ function convertTables() {
         }
     }
 }
-
 
 function convertHTMLTables() {
     var convertedOutput = "";
@@ -163,7 +221,7 @@ function convertHTMLTableElements(table, tableIndex) {
     var rows = table.getElementsByTagName("tr");
     var tableWidth = getHTMLTableWidth(rows);
 
-    if (isNaN(tableWidth) || tableWidth < 1) {
+    if (tableWidth.length < 1) {
         displayMessage(0, "Unable to generate table" + (tableIndex + 1) + ", 1 or more rows have no cells\n")
     }
     else {
@@ -179,7 +237,7 @@ function convertHTMLTableElements(table, tableIndex) {
 
 function getHTMLTableWidth(rows) {
     if (tableWidthOption == "header") {
-        return rows[0].children.length;
+        return Array.from({ length: rows[0].children.length }, (_, i) => i + 1);
     }
     else if (tableWidthOption == "custom") {
         return customWidth;
@@ -193,10 +251,10 @@ function getHTMLTableWidth(rows) {
             minLength = Math.min(minLength, rowLength);
         }
         if (tableWidthOption == "fill") {
-            return maxLength;
+            return Array.from({ length: maxLength }, (_, i) => i + 1);
         }
         else {
-            return minLength;
+            return Array.from({ length: minLength }, (_, i) => i + 1);
         }
     }
 }
@@ -204,16 +262,16 @@ function getHTMLTableWidth(rows) {
 function convertHTMLRowElements(rowIndex, rowContent, tableWidth) {
     var convertedRow = [""];
     var rowElements = rowContent.children;
+    for (var i = 0; i < tableWidth.length; i++) {
 
-    for (var i = 0; i < tableWidth; i++) {
-        var convertedElement = processOptions(rowElements[i], rowIndex, i);
+        var convertedElement = processOptions(rowElements[tableWidth[i] - 1], rowIndex, i);
 
         convertedRow.push(convertedElement);
     }
     convertedRow.push("");
 
     if (rowIndex == 0) {
-        return createDividerRow(tableWidth, convertedRow);
+        return createDividerRow(tableWidth.length, convertedRow);
     }
     return convertedRow.join(markdownCellSeparator).trim();
 }
@@ -227,8 +285,8 @@ function convertWithDelimiter() {
     var tableRows = inputData.split(/\r?\n/);
     var tableWidth = getTableWidth(tableRows);
 
-    if (isNaN(tableWidth) || tableWidth < 1) {
-        displayMessage(1, "Unable to generate table, 1 or more rows have no cells")
+    if (tableWidth.length < 1) {
+        displayMessage(1, "Unable to generate table, 1 or more rows have no cells");
     }
     else {
         var convertedRows = [];
@@ -236,10 +294,10 @@ function convertWithDelimiter() {
             var convertedRow = [""];
             var rowElements = tableRows[rowIndex].split(tableDelimiter);
 
-            for (var columnIndex = 0; columnIndex < tableWidth; columnIndex++) {
+            for (var columnIndex = 0; columnIndex < tableWidth.length; columnIndex++) {
                 var createdElement = document.createElement("td");
-                if (rowElements[columnIndex]) {
-                    createdElement.innerHTML = rowElements[columnIndex];
+                if (rowElements[tableWidth[columnIndex] - 1]) {
+                    createdElement.innerHTML = rowElements[tableWidth[columnIndex] - 1];
                 }
                 var convertedElement = processOptions(createdElement, rowIndex, columnIndex);
 
@@ -248,7 +306,7 @@ function convertWithDelimiter() {
             convertedRow.push("");
 
             if (rowIndex == 0) {
-                convertedRows.push(createDividerRow(tableWidth, convertedRow));
+                convertedRows.push(createDividerRow(tableWidth.length, convertedRow));
             }
             else {
                 convertedRows.push(convertedRow.join(markdownCellSeparator).trim());
@@ -261,7 +319,7 @@ function convertWithDelimiter() {
 
 function getTableWidth(rows) {
     if (tableWidthOption == "header") {
-        return rows[0].split(tableDelimiter).length;
+        return Array.from({ length: rows[0].split(tableDelimiter).length }, (_, i) => i + 1);
     }
     else if (tableWidthOption == "custom") {
         return customWidth;
@@ -275,10 +333,10 @@ function getTableWidth(rows) {
             minLength = Math.min(minLength, rowLength);
         }
         if (tableWidthOption == "fill") {
-            return maxLength;
+            return Array.from({ length: maxLength }, (_, i) => i + 1);
         }
         else {
-            return minLength;
+            return Array.from({ length: minLength }, (_, i) => i + 1);
         }
     }
 }
@@ -319,7 +377,7 @@ function smartConverter() {
             convertedRow.push(convertedElement);
 
             if (columnIndex == cellIndex.length - 1 && !reachedLastChar) {
-                var reachedLastChar = true;
+                reachedLastChar = true;
                 cellContent = tableRows[rowIndex].substring(previousBoundaryIndex);
                 createdElement.textContent = cellContent;
                 var convertedElement = processOptions(createdElement, rowIndex, columnIndex);
@@ -328,16 +386,20 @@ function smartConverter() {
             }
         }
         var rowLength = convertedRow.length
-        var tableWidth = customWidth;
+        var tableWidth = smartWidth.length;
         if (rowLength - 1 < tableWidth) {
             for (i = -1; i < tableWidth - rowLength; i++) {
                 convertedRow.push("");
             }
         }
+
+        if (customWidth.length > 0) {
+            convertedRow = convertedRow.filter((_, index) => index === 0 || customWidth.includes(index));
+        }
         convertedRow.push("");
 
         if (rowIndex == 0) {
-            convertedRows.push(createDividerRow(tableWidth, convertedRow));
+            convertedRows.push(createDividerRow(convertedRow.length - 2, convertedRow));
         }
         else {
             convertedRows.push(convertedRow.join(markdownCellSeparator).trim());
@@ -429,7 +491,7 @@ function getCellIndex(cellIndexPerRow, rowCount) {
             }
         }
     }
-    return shuffleArray(refined).slice(0, customWidth - 1).sort((a, b) => a - b);
+    return shuffleArray(refined).slice(0, smartWidth.length - 1).sort((a, b) => a - b);
 }
 
 function shuffleArray(array) {
@@ -459,7 +521,6 @@ function extractCellIndices(tableRows, customRegex, cellStartChars) {
 
 function computeBoundaries(str, spacePattern, charPattern) {
     const boundaries = [];
-
     let match;
 
     while ((match = spacePattern.exec(str)) !== null) {
@@ -506,6 +567,7 @@ function processOptions(elementData, rowIndex, columnIndex) {
         elementData.innerHTML = elementData.innerHTML.replace(/\|/g, '\\|')
     }
     else {
+        //good thing js does not have index out of bounds errors in this instance
         elementData = document.createElement("td");
     }
 

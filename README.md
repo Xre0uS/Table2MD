@@ -91,7 +91,7 @@ Converts to:
 With threshold at 25, some of the items are off but it's pretty good considering it will take way longer to manually fix it.
 
 #### The inputs:
-- **Table width**: Sets the table width, will create empty cells if it cannot match the requirement, will cut off cells longer than the width
+- **Table width**: Sets the table width, will create empty cells if it cannot match the requirement, will cut off cells longer than the width.
 - **Delimiter**: The delimiter of the table, like `-` or `+`, the custom delimiter should be the only characters seperating the cells (e.g. the example above but `-` instead of spaces). Or add your own regex here, then it will tries to match for the cell character rule (see below), defaults to match spaces (entering nothing is equal to using `space (smart selection)`).
 - **Additional cell characters**: By default, only alphanumeric characters are chosen as the start and end of a cell, add additional characters here.
 - **Threshold**: The % where a cell breakpoints must appear over all the rows for the separator to be created, basically, higher will mean less cell dividers, lower means more.

@@ -15,7 +15,7 @@
         <div class="button-container">
             <div class="message-box" id="message-box"></div>
             <button id="btn-convert" title="Convert again to get different possible results">Convert</button>
-            <button id="btn-copy">Copy</button>  
+            <button id="btn-copy">Copy</button>
         </div>
     </div>
     <div class="options-container">
@@ -62,8 +62,12 @@
             <option value="trim">Trim</option>
             <option value="custom">Custom</option>
         </Select>
-        <input type="text" id="width-input-box" width="10px" style="width: 35px; display: none;" placeholder="Width" title="Enter table width">
+        <div id="width-input-div" style="display: inline-block;">
+            <input type="text" id="width-input-box" width="20px" style="width: 50px; display: inline-block;" placeholder="Width" title="Enter table width">
+                <div style="display: inline-block;" id="width-help"><a href="#">?</a></div>
+        </div>
     </div>
+      
     <div class="input-container">
         <div class="textarea-container">
             <div class="textarea-header">
@@ -77,9 +81,12 @@
                     <option value="advanced" data-delimiter="advanced">Advanced smart selection</option>
                 </select>
                 <div id="advanced-options" style="display: inline-block;">
-                    <input type="text" id="delimiter-input" style="width: 60px;" placeholder="Delimiter" title="Enter your own delimiter, leave blank for smart selection of space. Supports regex">
-                    <input type="text" id="cell-character-input" style="width: 40px;" placeholder="Cell char" title="By default, only alphanumeric characters are chosen as the start and end of a cell, add additional characters here">
-                    <input type="range" min="1" max="100" value="75" class="slider" style="width: 200px;" id="threshold-slider" title="Set a threshold percentage">
+                    <input type="text" id="delimiter-input" style="width: 60px;" placeholder="Delimiter"
+                        title="Enter your own delimiter, leave blank for smart selection of space. Supports regex">
+                    <input type="text" id="cell-character-input" style="width: 40px;" placeholder="Cell char"
+                        title="By default, only alphanumeric characters are chosen as the start and end of a cell, add additional characters here">
+                    <input type="range" min="1" max="100" value="50" class="slider" style="width: 200px;"
+                        id="threshold-slider" title="Set a threshold percentage">
                     <div id="slider-percentage" style="display: inline-block;"></div>
                 </div>
             </div>

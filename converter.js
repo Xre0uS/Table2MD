@@ -134,7 +134,7 @@ function parseWidthInput(input) {
 
     let result = [];
 
-    if (tableWidthOption === "custom") {
+    if (converterMode == "spaceSmart" || converterMode == "advanced") {
         const firstNum = parseInt(input.split(',')[0]);
         if (firstNum < MAX_LIMIT) {
             smartWidth = Array.from({ length: firstNum }, (_, i) => i + 1);
@@ -185,6 +185,7 @@ function parseWidthInput(input) {
 
 function convertTables() {
     if (widthOptionsDropdown.value == "custom" && !customWidth) {
+        return;
     }
     else {
         if (converterMode == "html") {

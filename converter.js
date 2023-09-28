@@ -378,6 +378,9 @@ function smartConverter() {
             convertedRow.push(convertedElement);
 
             if (columnIndex == cellIndex.length - 1 && !reachedLastChar) {
+                if (columnIndex == 0) {
+                    columnIndex++
+                }
                 reachedLastChar = true;
                 cellContent = tableRows[rowIndex].substring(previousBoundaryIndex);
                 createdElement.textContent = cellContent;
@@ -386,7 +389,7 @@ function smartConverter() {
                 convertedRow.push(convertedElement);
             }
         }
-        var rowLength = convertedRow.length
+        var rowLength = convertedRow.length;
         var tableWidth = smartWidth.length;
         if (rowLength - 1 < tableWidth) {
             for (i = -1; i < tableWidth - rowLength; i++) {
@@ -424,7 +427,7 @@ function buildRegexFromInput() {
         cellStartChars = new RegExp(`${customCellChar}|${cellStartChars.source}`, 'g')
     }
 
-    if (/\s+/g.test(customDelimiter) || converterMode == "spaceSmart" || customDelimiter == "") {
+    if (/^\s+$/g.test(customDelimiter) || converterMode == "spaceSmart" || customDelimiter == "") {
         customDelimiter = "/\\s+/g";
         if (converterMode == "spaceSmart") {
             thresholdValue = 50;
@@ -479,6 +482,7 @@ function getCellIndex(cellIndexPerRow, rowCount) {
             if (!groupedByCount[count]) groupedByCount[count] = [];
             groupedByCount[count].push(parseInt(num));
         });
+
     const refined = [];
     for (const group of Object.values(groupedByCount)) {
         group.sort((a, b) => a - b);
@@ -520,15 +524,15 @@ function extractCellIndices(tableRows, customRegex, cellStartChars) {
     return cellIndexPerRow;
 }
 
-function computeBoundaries(str, spacePattern, charPattern) {
+function computeBoundaries(str, customRegex, cellStartChars) {
     const boundaries = [];
     let match;
 
-    while ((match = spacePattern.exec(str)) !== null) {
+    while ((match = customRegex.exec(str)) !== null) {
         boundaries.push(match.index, match.index + match[0].length);
     }
 
-    while ((match = charPattern.exec(str)) !== null) {
+    while ((match = cellStartChars.exec(str)) !== null) {
         boundaries.push(match.index, match.index + match[0].length);
     }
     boundaries.sort((a, b) => a - b);

@@ -9,7 +9,7 @@
 - Smart selector which tries dynamically find cells even if the table is badly formatted (see example), with regex support
 - Supported formats: HTML, spaces(2 or more), Excel, CSV, dash, and smart selection mode
 
-## Use it here: https://xre0us.github.io/Table2MD/
+## Use it here: https://xre0us.io/Table2MD/
 
 ## HTML Example
 

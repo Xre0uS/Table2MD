@@ -183,8 +183,57 @@ function parseWidthInput(input) {
     return result;
 }
 
+function convertNessusToMarkdown(input) {
+    // Split by each "Port xxx/tcp was found to be open"
+    const portBlocks = input.split(/Port \d+\/tcp was found to be open/).slice(1);
+    let hostPorts = {};
+
+    portBlocks.forEach(block => {
+        // Find the port line
+        const portLineMatch = block.match(/Hosts\s+([\d]+) \/ tcp/);
+        if (!portLineMatch) return;
+        const portNum = portLineMatch[1].trim();
+
+        // Find all IPs under this port
+        const ips = [];
+        const lines = block.split('\n');
+        let foundPortLine = false;
+        for (let line of lines) {
+            line = line.trim();
+            if (foundPortLine && /^\d{1,3}(\.\d{1,3}){3}$/.test(line)) {
+                ips.push(line);
+            }
+            if (line.startsWith(portNum + " / tcp")) {
+                foundPortLine = true;
+            }
+        }
+        // If no IPs found, try to find IPs after the port line
+        if (ips.length === 0) {
+            const portIdx = lines.findIndex(l => l.trim().startsWith(portNum + " / tcp"));
+            if (portIdx !== -1 && lines[portIdx + 1]) {
+                const ipLine = lines[portIdx + 1].trim();
+                if (/^\d{1,3}(\.\d{1,3}){3}$/.test(ipLine)) {
+                    ips.push(ipLine);
+                }
+            }
+        }
+        ips.forEach(ip => {
+            if (!hostPorts[ip]) hostPorts[ip] = [];
+            hostPorts[ip].push(portNum);
+        });
+    });
+
+    // Build Markdown table
+    let md = `| Host | Port(s) |\n|------|---------|\n`;
+    Object.entries(hostPorts).forEach(([host, ports]) => {
+        const portStr = `\`${ports.join(',')}\``;
+        md += `| ${host} | ${portStr} |\n`;
+    });
+    return md.trim();
+}
+
 function convertTables() {
-    if (widthOptionsDropdown.value == "custom" && !customWidth) {
+    if (widthOptionsDropdown.value == "custom" && !customWidth && converterMode !== "nessus") {
         return;
     }
     else {
@@ -193,6 +242,15 @@ function convertTables() {
         }
         else if (converterMode == "spaceSmart" || converterMode == "advanced") {
             smartConverter();
+        }
+        else if (converterMode == "nessus") {
+            // Use the new function for Nessus SYN output
+            const md = convertNessusToMarkdown(inputText);
+            if (!md || md === "| Port | Host |\n|------|------|") {
+                displayMessage(1, "No valid Nessus SYN output found");
+            } else {
+                displayOutput(1, md);
+            }
         }
         else {
             convertWithDelimiter();

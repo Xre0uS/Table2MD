@@ -7,9 +7,9 @@
 - First header/column style
 - Adjust table width to be the same as the header, fill to match max width or trim to min width
 - Smart selector which tries dynamically find cells even if the table is badly formatted (see example), with regex support
-- Supported formats: HTML, spaces(2 or more), Excel, CSV, dash, and smart selection mode
+- Supported formats: HTML, spaces(2 or more), Excel, CSV, dash, smart selection mode and Nessus SYN scanner output
 
-## Use it here: https://table2md.xre0us.io/
+## Use it here: https://table2md.xreous.io/
 
 ## HTML Example
 
@@ -47,6 +47,36 @@ Converts to:
 | Banana | Yellow``#FFE135`` | Sweet |
 | Orange | Orange | Citrusy \| sour |
 ```
+
+## Nessus SYN Scanner Output
+
+Ctrl + A on the SYN scanner plugin page and copy:
+
+```
+Port 80/tcp was found to be open
+
+Hosts
+80 / tcp / www 	
+10.86.21.174
+10.86.21.212
+
+Port 443/tcp was found to be open
+
+Hosts
+443 / tcp / www 	
+10.86.21.174
+10.86.21.212
+```
+
+Converts to:
+
+| Host | Port(s) |
+|------|---------|
+| 10.32.50.164 | `80,443` |
+| 10.32.50.167 | `80,443` |
+
+The styling checkboxes have no effect in this mode.
+
 
 ## Smart Selector Example
 ```
